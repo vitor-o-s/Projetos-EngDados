@@ -15,5 +15,5 @@ There are 2 cenarios. First when a error will occur and second when a error occu
 If you don't know what it is, see the documetation [here](https://docs.microsoft.com/en-us/power-automate/getting-started).
 
 Imagine when you want to use some table but in that moment the table isn't disponible, so you deactive it and send an alert to your team.
-* [Deactive Alert]()
+* [Deactivation alert]()
 * [Other futher]()
