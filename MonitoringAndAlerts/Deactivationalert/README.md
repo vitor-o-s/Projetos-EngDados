@@ -14,7 +14,7 @@ Receiving the trigger, the flow reads the json received and generates variables 
 
 ## JSON
 
-In my case I only need to send the table name
+In my case I only need to send/receive the table name
 
 ```json
 {
