@@ -12,6 +12,6 @@ There are 2 cenarios. First when a error will occur and second when a error occu
 
 ## Powerautomate
 
-Imagine when you want to use some table but in that moment the table isn't disponible, so you deative it and send an alert to your team.
-* [Deative Alert]()
+Imagine when you want to use some table but in that moment the table isn't disponible, so you deactive it and send an alert to your team.
+* [Deactive Alert]()
 * [Other futher]()
