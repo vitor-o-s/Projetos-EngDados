@@ -1,0 +1,113 @@
+trigger:
+  - main
+
+stages:
+- stage: Build
+  displayName: Build stage
+
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: UsePythonVersion@0
+      displayName: "Setting python version to 3.8 as required by functions"
+      inputs:
+        versionSpec: '3.8'
+        architecture: 'x64'
+
+    - bash: |
+        pip install --target="src/.python_packages/lib/site-packages" -r src/requirements.txt
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: 'src'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+
+- stage: Deploy_DEV
+  displayName: Deploy DEV
+  variables:
+    - group: da-functions-dev
+    - group: kvdataanalyticsdev
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy DEV
+    pool:
+      name: 'OnPremises MRV CD'
+    environment: da_functions-dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureFunctionApp@1
+              displayName: 'Deploy Azure Function App'
+              inputs:
+                azureSubscription: 'azdev-sc-ecossistema-dataeanalytics'
+                appType: functionAppLinux
+                appName: $(functionAppName)
+                package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+                appSettings: |
+                 -DATALAKE_URL $(DATALAKE_URL) 
+                 -DOCUSIGN_DATALAKE_ZONE $(DOCUSIGN_DATALAKE_ZONE) -DOCUSIGN_DATALAKE_FOLDER $(DOCUSIGN_DATALAKE_FOLDER) 
+                 -PRECOS_DATALAKE_ZONE $(PRECOS_DATALAKE_ZONE) -PRECOS_DATALAKE_FOLDER $(PRECOS_DATALAKE_FOLDER) -PRECOS_DATALAKE_TABLE $(PRECOS_DATALAKE_TABLE) -MRVPRECOS $(MRVPrecos)
+
+- stage: Deploy_QAS
+  displayName: Deploy QAS
+  variables:
+    - group: da-functions-qas
+    - group: kvdataanalyticsqas
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy QAS
+    pool:
+      name: 'OnPremises MRV CD'
+    environment: da_functions-qas
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureFunctionApp@1
+              displayName: 'Deploy Azure Function App'
+              inputs:
+                azureSubscription: 'azdev-sc-ecossistema-dataeanalytics'
+                appType: functionAppLinux
+                appName: $(functionAppName)
+                package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+                appSettings: |
+                 -DATALAKE_URL $(DATALAKE_URL) -DOCUSIGN_DATALAKE_ZONE $(DOCUSIGN_DATALAKE_ZONE) -DOCUSIGN_DATALAKE_FOLDER $(DOCUSIGN_DATALAKE_FOLDER) -PRECOS_DATALAKE_ZONE $(PRECOS_DATALAKE_ZONE) -PRECOS_DATALAKE_FOLDER $(PRECOS_DATALAKE_FOLDER) -PRECOS_DATALAKE_TABLE $(PRECOS_DATALAKE_TABLE) -MRVPRECOS $(MRVPrecos)
+
+- stage: Deploy_PRD
+  displayName: Deploy PRD
+  variables:
+    - group: da-functions-prd
+    - group: kvdataanalyticsprd
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy PRD
+    pool:
+      name: 'OnPremises MRV CD'
+    environment: da_functions-prd
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureFunctionApp@1
+              displayName: 'Deploy Azure Function App'
+              inputs:
+                azureSubscription: 'azdev-sc-ecossistema-dataeanalytics'
+                appType: functionAppLinux
+                appName: $(functionAppName)
+                package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+                appSettings: |
+                 -DATALAKE_URL $(DATALAKE_URL)
+                 -DOCUSIGN_DATALAKE_ZONE $(DOCUSIGN_DATALAKE_ZONE) -DOCUSIGN_DATALAKE_FOLDER $(DOCUSIGN_DATALAKE_FOLDER) 
+                 -PRECOS_DATALAKE_ZONE $(PRECOS_DATALAKE_ZONE) -PRECOS_DATALAKE_FOLDER $(PRECOS_DATALAKE_FOLDER) -PRECOS_DATALAKE_TABLE $(PRECOS_DATALAKE_TABLE) -MRVPRECOS $(MRVPrecos)
