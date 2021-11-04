@@ -38,9 +38,9 @@ stages:
             artifact: CMC
             
           - task: SonarQubeAnalyze@4
-	              displayName: 'Run code Analysis'
+              displayName: 'Run code Analysis'
           		  continueOnError: true
-          		
+        
           - task: PowerShell@2
             displayName: 'Check Quality Gate Status'
             env:
