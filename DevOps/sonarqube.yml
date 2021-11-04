@@ -57,11 +57,11 @@ stages:
                 $result = Invoke-RestMethod -Method Get -Url https://sonarqube.mrv.com.br/api/qualitygates/project_status?projectKey=$(SonarProjectDevKey) -Headers $headers
                 $result | ConvertTo-Json | Write-Host
         
-       if ($result.projectStatus.status -eq "OK") {
-           write-Host "Quality Gate Succeeded"
-           }else{
-        throw "Quality gate failed"
-        }
+                if ($result.projectStatus.status -eq "OK") {
+                    write-Host "Quality Gate Succeeded"
+                }else{
+                    throw "Quality gate failed"
+                }
          
       	  - task: SonarQubePublish@4
             displayName: 'Publish Quality Gate Result'
