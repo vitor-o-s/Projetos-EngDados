@@ -2,7 +2,7 @@
 
 
 
-##  **História **
+## **História**
 
 Lidar com grande volume de dados costumava ser uma tarefa praticamente impossível a pouco mais de uma década uma vez que não tinhamos tanto poder computacional e plataformas de processamento paralelo ainda não eram realidade, contudo com a criação do [Hadoop](https://www.dtidigital.com.br/blog/hadoop/) surgiu uma  ferramenta que resolvia os 3 grandes problemas da computação paralela sendo:
 
@@ -24,7 +24,7 @@ Além disso ao ser desenvolvido uma grande preocupação foi a criação de uma 
 
 É possível ter uma ideia de como o Spark está organizado pelo seguinte diagrama:
 
-![Camadas de arquitetura do Apache Spark](/home/vitor/dti/codigos/Projetos-EngDados/SparkArchitecture.png)
+![Camadas de arquitetura do Apache Spark](/SparkArchitecture.png)
 
 ### Low Level API's
 
