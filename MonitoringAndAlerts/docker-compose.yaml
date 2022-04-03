@@ -1,10 +1,10 @@
 version: "3.7"
 #https://github.com/compose-spec/compose-spec/blob/master/spec.md#using-extensions-as-fragments
-x-logging:
+x-logging: 
   options:
     max-size: "100m"
     max-file: "5"
-  driver: gcplogs
+  driver: json-file
 services:
   # hook in case we need to add init behavior
   # every root service (no depends_on) should depend on init
