@@ -21,7 +21,8 @@ services:
       - ${HACK_LOCAL_ROOT_PARENT}:/local_parent
   bootloader:
     image: airbyte/bootloader:${VERSION}
-    logging: gcplogs
+    logging: 
+      driver: gcplogs
     container_name: airbyte-bootloader
     environment:
       - AIRBYTE_VERSION=${VERSION}
