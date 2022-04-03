@@ -22,7 +22,7 @@ services:
   bootloader:
     image: airbyte/bootloader:${VERSION}
     logging: 
-      driver: gcplogs
+    driver: gcplogs
     container_name: airbyte-bootloader
     environment:
       - AIRBYTE_VERSION=${VERSION}
